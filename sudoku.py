@@ -21,11 +21,15 @@ class Grid:
         self.col = col
         self.width = width
         self.height = height
-
+        self.current_x = 5
+        self.current_y = 5
+        self.grids = []
+        self.runs = 0
+        
     def divide_board(self, win):
         space = self.width / 9
         for i in range(self.row + 1):
-            if i % 3 == 0:
+            if i % 3 == 0 and i != 0:
                 thickness = 4
             else:
                 thickness = 2
@@ -36,12 +40,27 @@ class Grid:
         
         for i,r in enumerate(self.board, start=0):
             for o,c in enumerate(r,start=0):
-                print(r[i])
-                print(c)
-                current_x = int(r[o] * 60)
-                current_y = int(i * 60)
-                current_rect = pygame.Rect((current_x, current_y),(60,60))
-                pygame.draw.rect(win, (random.randint(0,255),255,255), current_rect)
+                self.runs += 1
+                current_rect = pygame.Rect((self.current_x, self.current_y),(60,60))
+                grid = pygame.draw.rect(win, (220,50,50), current_rect)
+
+                if self.runs <= 81:
+                    self.grids.append(str(grid))
+                    print(self.grids)
+            
+                if o >= 8 and (i + 1) % 3 != 0:
+                    self.current_x = 6
+                    self.current_y += 65
+                elif o >= 8 and (i + 1) % 3 == 0:
+                    self.current_x = 6
+                    self.current_y += 70
+                else:
+                    if (o + 1) % 3 == 0 and o != 0:
+                        self.current_x += 70
+                        self.current_y += 0
+                    else:
+                        self.current_x += 65
+                        self.current_y += 0
     
     #def create_rect_inputs(self, win):
         #pass
@@ -68,6 +87,7 @@ def main():
 
         pygame.time.Clock().tick(40)
         mouse_pos = pygame.mouse.get_pos()
+
         #print(mouse_pos)
         refresher(win)
 
