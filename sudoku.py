@@ -23,22 +23,32 @@ class Grid:
         self.height = height
 
     def divide_board(self, win):
-        gap = self.width / 9
-        for i in range(self.row):
+        space = self.width / 9
+        for i in range(self.row + 1):
             if i % 3 == 0:
                 thickness = 4
             else:
                 thickness = 2
-            pygame.draw.line(win,(0,0,0), ((i * gap) - 1,0), ((i*gap) - 1,self.height), thickness)
-            pygame.draw.line(win,(0,0,0), (0,(i * gap) - 1), (self.width,(i*gap) - 1), thickness)
+            pygame.draw.line(win,(0,0,0), (i * space,0), (i*space,self.height), thickness)
+            pygame.draw.line(win,(0,0,0), (0,i * space), (self.width,i*space), thickness)
+            if i % 9 == 0:
+                pygame.draw.line(win,(0,0,0), (0,i * space), (self.width,i*space), 10)
+    
+    def create_rect_inputs(self, win):
+        pass
+    
+def solver_activate(self):
+    pass
 
 def refresher(win):
     win.fill((255,255,255))
-    Grid(9,9,600,600).divide_board(win)
+    full_board = Grid(9,9,600,600)
+    full_board.divide_board(win)
+    full_board.create_rect_inputs(win)
     pygame.display.update()
 
 def main():
-    win = pygame.display.set_mode((600,600))
+    win = pygame.display.set_mode((600,700))
     pygame.display.set_caption("Sudoku")
     running = True
 
@@ -48,6 +58,8 @@ def main():
                 running = False
 
         pygame.time.Clock().tick(40)
+        mouse_pos = pygame.mouse.get_pos()
+        print(mouse_pos)
         refresher(win)
 
 main()
