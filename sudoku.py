@@ -3,53 +3,51 @@ import os, sys
 import random
 import time
 
-# Setup & Setup Variables
-clock = pygame.time.Clock()
-win = pygame.display.set_mode((600, 700))
-pygame.display.set_caption = 'Sudoku'
-pygame.font.init()
-input_font = pygame.font.Font(None, 35)
-user_input = ''
+class Grid:
+    board = [
+        [7,8,0,4,0,0,1,2,0],
+        [6,0,0,0,7,5,0,0,9],
+        [0,0,0,6,0,1,0,7,8],
+        [0,0,7,0,4,0,2,6,0],
+        [0,0,1,0,5,0,9,3,0],
+        [9,0,4,0,6,0,0,0,5],
+        [0,7,0,3,0,0,0,1,2],
+        [1,2,0,0,0,7,4,0,0],
+        [0,4,9,2,0,6,0,0,7]
+    ]
 
-# Asset Loading
-template = pygame.image.load(os.path.join("template1.jpg"))
+    def __init__(self, row, col, width, height):
+        self.row = row
+        self.col = col
+        self.width = width
+        self.height = height
 
+    def divide_board(self, win):
+        gap = self.width / 9
+        for i in range(self.row):
+            if i % 3 == 0:
+                thickness = 4
+            else:
+                thickness = 2
+            pygame.draw.line(win,(0,0,0), ((i * gap) - 1,0), ((i*gap) - 1,self.height), thickness)
+            pygame.draw.line(win,(0,0,0), (0,(i * gap) - 1), (self.width,(i*gap) - 1), thickness)
 
-#Main Game Function
-
-def draw_rects():
-        pygame.draw.rect(win,pygame.Color('lightskyblue3'),new_rect,2)
-        pygame.display.update()
-
-for i in range(81):
-    dimensions = (30,30)
-    startpos = (15,15)
-    new_rect = pygame.Rect((startpos[0] + i, startpos[1] + i),dimensions)
-    time.sleep(.1)
-    draw_rects()
+def refresher(win):
+    win.fill((255,255,255))
+    Grid(9,9,600,600).divide_board(win)
+    pygame.display.update()
 
 def main():
-    run = True
-    global user_input
-    global new_rect
+    win = pygame.display.set_mode((600,600))
+    pygame.display.set_caption("Sudoku")
+    running = True
 
-    while run:
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
-            if event.type == pygame.KEYDOWN:
-                if len(user_input) < 1:
-                    if event.key == pygame.K_BACKSPACE:
-                        user_input = user_input[:-1]
-                    else:
-                        user_input += event.unicode
-        
-        win.fill((0, 0, 0))
-        win.blit(template,(0,0))
-        text_surface = input_font.render(user_input,True,(100,100,100))
-        win.blit(text_surface,(new_rect.x + 7.5,new_rect.y + 2.5))
-        
-        pygame.display.flip()
-        clock.tick(60)
+                running = False
+
+        pygame.time.Clock().tick(40)
+        refresher(win)
 
 main()
