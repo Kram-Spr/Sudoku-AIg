@@ -15,7 +15,7 @@ class Grid:
         [1,2,0,0,0,7,4,0,0],
         [0,4,9,2,0,6,0,0,7]
     ]
-
+ 
     def __init__(self, row, col, width, height):
         self.row = row
         self.col = col
@@ -64,11 +64,17 @@ class Grid:
                 current_text = current_font.render(str(c), True, (0,0,0))
                 win.blit(current_text, (grid.x + 20, grid.y + 10))
 
-    
-def solver_activate(self):
-    pass
+    def valid_input(self, input):
+        pass
+
+    def solver_activate(self, win):
+        pass
+
+solve_button = ''
 
 def refresher(win):
+    global solve_button
+    global full_board
     win.fill((255,255,255))
     full_board = Grid(9,9,600,600)
     full_board.divide_board(win)
@@ -81,18 +87,22 @@ def refresher(win):
     pygame.display.update()
 
 def main():
+    global solve_button
     win = pygame.display.set_mode((600,700))
     pygame.display.set_caption("Sudoku Solver")
     running = True
 
     while running:
+        mouse_pos = pygame.mouse.get_pos()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if mouse_pos[0] > solve_button.x and mouse_pos[0] < (solve_button.x + 200) and mouse_pos[1] > solve_button.y and mouse_pos[1] < (solve_button.y + 75):
+                    Grid(9,9,600,600).solver_activate(win)
 
         pygame.time.Clock().tick(30)
-        mouse_pos = pygame.mouse.get_pos()
-
         refresher(win)
 
 main()
