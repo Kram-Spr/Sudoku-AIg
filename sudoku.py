@@ -24,9 +24,10 @@ class Grid:
         self.current_x = 5
         self.current_y = 5
         self.grids = []
-        self.runs = 0
         
     def divide_board(self, win):
+        pygame.font.init()
+
         space = self.width / 9
         for i in range(self.row + 1):
             if i % 3 == 0 and i != 0:
@@ -40,13 +41,8 @@ class Grid:
         
         for i,r in enumerate(self.board, start=0):
             for o,c in enumerate(r,start=0):
-                self.runs += 1
                 current_rect = pygame.Rect((self.current_x, self.current_y),(60,60))
-                grid = pygame.draw.rect(win, (220,50,50), current_rect)
-
-                if self.runs <= 81:
-                    self.grids.append(str(grid))
-                    print(self.grids)
+                grid = pygame.draw.rect(win, (255,255,255), current_rect)
             
                 if o >= 8 and (i + 1) % 3 != 0:
                     self.current_x = 6
@@ -61,9 +57,11 @@ class Grid:
                     else:
                         self.current_x += 65
                         self.current_y += 0
-    
-    #def create_rect_inputs(self, win):
-        #pass
+            
+                current_font = pygame.font.SysFont('Arial', 30)
+                current_text = current_font.render(str(c), True, (0,0,0))
+                win.blit(current_text, (grid.x + 20, grid.y + 10))
+
     
 def solver_activate(self):
     pass
@@ -72,12 +70,17 @@ def refresher(win):
     win.fill((255,255,255))
     full_board = Grid(9,9,600,600)
     full_board.divide_board(win)
-    #full_board.create_rect_inputs(win)
+    solve_rect = pygame.Rect((201, 615),(200,75))
+    solve_button = pygame.draw.rect(win, (34,139,34), solve_rect)
+    solve_font = pygame.font.SysFont('Arial', 30)
+    solve_font.set_bold(True)
+    solve_text = solve_font.render('SOLVE', True, (255,255,255))
+    win.blit(solve_text, (solve_button.x + 50, solve_button.y + 15))
     pygame.display.update()
 
 def main():
     win = pygame.display.set_mode((600,700))
-    pygame.display.set_caption("Sudoku")
+    pygame.display.set_caption("Sudoku Solver")
     running = True
 
     while running:
@@ -85,10 +88,9 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-        pygame.time.Clock().tick(40)
+        pygame.time.Clock().tick(30)
         mouse_pos = pygame.mouse.get_pos()
 
-        #print(mouse_pos)
         refresher(win)
 
 main()
