@@ -57,8 +57,10 @@ class Grid:
                     else:
                         self.current_x += 65
                         self.current_y += 0
-            
+
                 current_font = pygame.font.SysFont('Arial', 30)
+                if str(c) == '0':
+                    c = ''
                 current_text = current_font.render(str(c), True, (0,0,0))
                 win.blit(current_text, (grid.x + 20, grid.y + 10))
 
