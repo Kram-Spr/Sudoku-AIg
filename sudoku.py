@@ -69,7 +69,7 @@ class Grid:
         add_on = 0
         x_range = 0
         y_range = 0
-        input_loc = board[rownum][colnum]
+        input_loc = self.board[rownum][colnum]
 
         for rn in self.board[rownum]:
             if rn == input:
