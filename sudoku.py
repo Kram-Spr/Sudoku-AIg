@@ -64,12 +64,41 @@ class Grid:
                 current_text = current_font.render(str(c), True, (0,0,0))
                 win.blit(current_text, (grid.x + 20, grid.y + 10))
 
-    def valid_input(self, input):
-        pass
+    def valid_input(self, input, rownum, colnum):
+        valid = True
+        add_on = 0
+        x_range = 0
+        y_range = 0
+        input_loc = board[rownum][colnum]
+
+        for rn in self.board[rownum]:
+            if rn == input:
+                valid = False
+        
+        for r,rv in enumerate(self.board):
+            if rv[colnum] == input:
+                valid = False
+            for q,v in enumerate(rv):
+                if (q + 1) == 1:
+                    add_on = 2
+                elif (q + 2) == 2:
+                    add_on = 1
+                elif (q + 1) == 3:
+                    add_on = 0
+                
+        return valid
 
     def solver_activate(self, win):
-        pass
-
+        for i,r in enumerate(self.board, start=0):
+            for o,c in enumerate(r,start=0):
+                if c == 0:
+                    for x in range(1,10): 
+                        if self.valid_input(x, i, o):
+                            self.board[i][o] = x
+                            break
+                        #else:
+                            #time.sleep(.1)
+                            #self.solver_activate(win)
 solve_button = ''
 
 def refresher(win):
