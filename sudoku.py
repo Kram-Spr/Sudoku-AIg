@@ -87,14 +87,32 @@ class Grid:
 
         return valid
 
-    def solver_activate(self, win):
+    def find_empty(self):
         for i,r in enumerate(self.board, start=0):
-            for o,c in enumerate(r,start=0):
-                if c == 0:
-                    for x in range(1,10): 
-                        if self.valid_input(x, i, o):
-                            self.board[i][o] = x
-                            break
+            for o,c in enumerate(r, start=0):
+                if self.board[i][o] == 0:
+                    return (i,o)
+
+    def solver_activate(self, win):
+        found = self.find_empty()
+        if not found:
+            return True
+        else:
+            row,col = found
+
+        for x in range(1,10): 
+            if self.valid_input(x, row, col):
+                refresher(win)
+                pygame.time.delay(50)
+
+                self.board[row][col] = x
+
+                if self.solver_activate(win):
+                    return True
+
+                self.board[row][col] = 0
+
+        return False
 
 solve_button = ''
 
@@ -114,6 +132,7 @@ def refresher(win):
 
 def main():
     global solve_button
+    debounce = False
     win = pygame.display.set_mode((600,700))
     pygame.display.set_caption("Sudoku Solver")
     running = True
@@ -125,7 +144,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if mouse_pos[0] > solve_button.x and mouse_pos[0] < (solve_button.x + 200) and mouse_pos[1] > solve_button.y and mouse_pos[1] < (solve_button.y + 75):
+                if mouse_pos[0] > solve_button.x and mouse_pos[0] < (solve_button.x + 200) and mouse_pos[1] > solve_button.y and mouse_pos[1] < (solve_button.y + 75) and not debounce:
                     Grid(9,9,600,600).solver_activate(win)
 
         pygame.time.Clock().tick(30)
